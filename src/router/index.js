@@ -72,6 +72,15 @@ main.children.push({
   }
 })
 
+main.children.push({
+  path: '/role',
+  name: 'role',
+  component: _import('view/sys/role'),
+  meta: {
+    title: '角色管理'
+  }
+})
+
 router.addRoutes([main, login])
 
 router.addRoutes(noFind)

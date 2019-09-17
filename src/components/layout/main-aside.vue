@@ -25,6 +25,11 @@
           <i class="el-icon-user-solid"></i>
           <span slot="title">用户管理</span>
         </el-menu-item>
+        <el-menu-item class="i-el-aside-submenu"
+                      index="/role">
+          <i class="el-icon-user-solid"></i>
+          <span slot="title">角色管理</span>
+        </el-menu-item>
       </el-submenu>
     </el-menu>
   </el-aside>
