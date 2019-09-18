@@ -49,6 +49,9 @@
                        type="primary"
                        @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
             <el-button size="mini"
+                       type="primary"
+                       @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            <el-button size="mini"
                        :type="enablesBtnType(scope.row.state)"
                        @click="handleToggleState(scope.$index, scope.row)">{{enablesOption(scope.row.state)}}</el-button>
           </template>
@@ -63,6 +66,24 @@
                      :total="page.total">
       </el-pagination>
     </div>
+
+    <el-dialog title="编辑用户"
+               :visible.sync="dialogEditUser"
+               :width="dialogWidth">
+      <el-form :model="editUserForm"
+               :label-width="dialogLabelWidth">
+        <el-form-item label="昵称">
+          <el-input v-model="editUserForm.nickname"
+                    autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer"
+           class="dialog-footer">
+        <el-button @click="dialogEditUserCancel">取 消</el-button>
+        <el-button type="primary"
+                   @click="dialogEditUserConfirm">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -80,6 +101,13 @@ export default {
         size: 10,
         sizes: [10, 20, 30, 50],
         total: 0
+      },
+      dialogWidth: '500px',
+      dialogLabelWidth: '100px',
+      dialogEditUser: false,
+      editUserForm: {
+        id: '',
+        nickname: ''
       }
     }
   },
@@ -112,8 +140,10 @@ export default {
         })
     },
     handleEdit (index, row) {
-      console.log(index)
-      console.log(row)
+      this.editUserForm.id = row.id
+      this.editUserForm.nickname = row.nickname
+
+      this.dialogEditUser = true
     },
     handleToggleState (index, row) {
       this.$axiox.put('/sys/user/state/' + row.id)
@@ -205,6 +235,64 @@ export default {
         }
       }
       return fmt
+    },
+    handleDelete (index, row) {
+      this.$confirm('确认删除？', '删除用户', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(_ => {
+          this.$axiox.delete('/sys/user/' + row.id)
+            .then((response) => {
+              if (response.data.code === 200) {
+                this.$message({
+                  message: '删除用户成功',
+                  type: 'success'
+                })
+                this.getData()
+              } else if (response.data.msg) {
+                this.$message.error(response.data.msg)
+              }
+            })
+            .catch((error) => {
+              console.log('error:' + error)
+            })
+        })
+        .catch(_ => { })
+    },
+    dialogEditUserCancel () {
+      this.editUserForm = {
+        id: '',
+        nickname: ''
+      }
+      this.dialogEditUser = false
+    },
+    dialogEditUserConfirm () {
+      this.$axiox.put('/sys/user/edit', {
+        id: this.editUserForm.id,
+        nickname: this.editUserForm.nickname
+      })
+        .then((response) => {
+          if (response.data.code === 200) {
+            this.$message({
+              message: '编辑用户成功',
+              type: 'success'
+            })
+            this.getData()
+          } else if (response.data.msg) {
+            this.$message.error(response.data.msg)
+          }
+        })
+        .catch((error) => {
+          console.log('error:' + error)
+        })
+
+      this.editUserForm = {
+        id: '',
+        nickname: ''
+      }
+      this.dialogEditUser = false
     }
   },
   computed: {

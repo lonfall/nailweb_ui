@@ -288,21 +288,29 @@ export default {
       this.dialogEditRole = false
     },
     handleDelete (index, row) {
-      this.$axiox.delete('/sys/role/' + row.id)
-        .then((response) => {
-          if (response.data.code === 200) {
-            this.$message({
-              message: '删除角色成功',
-              type: 'success'
+      this.$confirm('确认删除？', '删除用户', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(_ => {
+          this.$axiox.delete('/sys/role/' + row.id)
+            .then((response) => {
+              if (response.data.code === 200) {
+                this.$message({
+                  message: '删除角色成功',
+                  type: 'success'
+                })
+                this.getData()
+              } else if (response.data.msg) {
+                this.$message.error(response.data.msg)
+              }
             })
-            this.getData()
-          } else if (response.data.msg) {
-            this.$message.error(response.data.msg)
-          }
+            .catch((error) => {
+              console.log('error:' + error)
+            })
         })
-        .catch((error) => {
-          console.log('error:' + error)
-        })
+        .catch(_ => { })
     }
   },
   created () {
