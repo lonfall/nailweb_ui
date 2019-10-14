@@ -30,6 +30,11 @@
           <i class="el-icon-user-solid"></i>
           <span slot="title">角色管理</span>
         </el-menu-item>
+        <el-menu-item class="i-el-aside-submenu"
+                      index="/menu">
+          <i class="el-icon-menu"></i>
+          <span slot="title">菜单管理</span>
+        </el-menu-item>
       </el-submenu>
     </el-menu>
   </el-aside>
@@ -44,7 +49,7 @@ export default {
   },
   methods: {
     menuSelect (index, indexPath) {
-      console.log('index:' + index + ',indexPath:' + indexPath)
+      // console.log('index:' + index + ',indexPath:' + indexPath)
     }
   }
 }

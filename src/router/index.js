@@ -81,6 +81,15 @@ main.children.push({
   }
 })
 
+main.children.push({
+  path: '/menu',
+  name: 'menu',
+  component: _import('view/sys/menu'),
+  meta: {
+    title: '菜单管理'
+  }
+})
+
 router.addRoutes([main, login])
 
 router.addRoutes(noFind)

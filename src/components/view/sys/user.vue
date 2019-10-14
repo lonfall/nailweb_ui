@@ -49,7 +49,7 @@
                        type="primary"
                        @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
             <el-button size="mini"
-                       type="primary"
+                       type="danger"
                        @click="handleDelete(scope.$index, scope.row)">删除</el-button>
             <el-button size="mini"
                        :type="enablesBtnType(scope.row.state)"
@@ -177,9 +177,9 @@ export default {
     enablesBtnType (state) {
       switch (state) {
         case 0:
-          return 'danger'
-        case 1:
           return 'success'
+        case 1:
+          return 'warning'
       }
     },
     enablesOption (state) {
