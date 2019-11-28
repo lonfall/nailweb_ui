@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import axiox from '../axios/http'
 // import HelloWorld from '@/components/HelloWorld'
 
 const _import = path => require('@/components/' + path + '.vue').default
@@ -17,21 +18,15 @@ const router = new Router({
   routes: []
 })
 
-var noFind = [
-  {
-    path: '/404',
-    name: '404',
-    component: _import('common/404'),
-    meta: {
-      title: '404',
-      unrequireAuth: true
-    }
-  },
-  {
-    path: '*',
-    redirect: '/404'
+var noFind = {
+  path: '/404',
+  name: '404',
+  component: _import('common/404'),
+  meta: {
+    title: '404',
+    unrequireAuth: true
   }
-]
+}
 
 var login = {
   path: '/login',
@@ -51,48 +46,12 @@ var main = {
   meta: {
     title: '首页'
   },
-  children: [
-    {
-      path: '/home',
-      name: 'home',
-      component: _import('view/home'),
-      meta: {
-        title: '首页'
-      }
-    }
-  ]
+  children: []
 }
 
-main.children.push({
-  path: '/user',
-  name: 'user',
-  component: _import('view/sys/user'),
-  meta: {
-    title: '用户管理'
-  }
-})
+router.addRoutes([login, noFind])
 
-main.children.push({
-  path: '/role',
-  name: 'role',
-  component: _import('view/sys/role'),
-  meta: {
-    title: '角色管理'
-  }
-})
-
-main.children.push({
-  path: '/menu',
-  name: 'menu',
-  component: _import('view/sys/menu'),
-  meta: {
-    title: '菜单管理'
-  }
-})
-
-router.addRoutes([main, login])
-
-router.addRoutes(noFind)
+var isUserMenuTouterLoad = false // 是否加载用户菜单路由
 
 router.beforeEach((to, from, next) => {
   // 判断当前路由是否不需要授权
@@ -102,7 +61,36 @@ router.beforeEach((to, from, next) => {
   } else {
     // 如果需要授权则获取token
     if (router.app.$cookies.isKey('token')) {
-      next()
+      if (isUserMenuTouterLoad) {
+        // 如果路由加载完毕则执行下一个钩子
+        next()
+      } else {
+        axiox
+          .get('/sys/menu/tree')
+          .then(response => {
+            if (response.data.code === 200) {
+              var treeData = response.data.data
+              console.log('menu tree get')
+              initUserMenuTouter(treeData)
+              router.addRoutes([
+                main,
+                {
+                  path: '*',
+                  redirect: '/404'
+                }
+              ])
+              isUserMenuTouterLoad = true
+              next({ ...to, replace: true })
+            } else if (response.data.msg) {
+              console.log('menu tree fail')
+              next(false)
+            }
+          })
+          .catch(error => {
+            console.log('error:' + error)
+            next(error)
+          })
+      }
     } else {
       next({
         path: '/login',
@@ -111,5 +99,35 @@ router.beforeEach((to, from, next) => {
     }
   }
 })
+
+/**
+ * 初始化用户菜单路由
+ * @param {*} treeData
+ */
+function initUserMenuTouter (treeData) {
+  if (treeData) {
+    for (var i = 0; i < treeData.length; i++) {
+      var node = treeData[i]
+      if (node.data.type === 1) {
+        // 是菜单则添加路由
+        main.children.push({
+          path: node.data.url,
+          component: _import('view' + node.data.url),
+          meta: {
+            title: node.data.name
+          }
+        })
+      } else if (
+        node.data.type === 0 &&
+        node.hasChildren &&
+        node.children &&
+        node.children.length
+      ) {
+        // 是目录且子菜单不为空，则回调
+        initUserMenuTouter(node.children)
+      }
+    }
+  }
+}
 
 export default router

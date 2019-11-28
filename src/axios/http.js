@@ -64,7 +64,7 @@ axios.interceptors.response.use(
     if (response.data.resultCode === '404') {
       console.log('response.data.resultCode是404')
       // 跳转到登录页面
-      window.location.href = 'http://127.0.0.1:8080/#/login'
+      // window.location.href = 'http://127.0.0.1:8080/#/login'
     } else {
       return response
     }

@@ -10,7 +10,23 @@
              active-text-color="#40b4ff"
              class="i-el-aside-menu-vertical"
              @select="menuSelect">
-      <el-menu-item class="i-el-aside-submenu"
+      <template v-for="(node,key) in treeData">
+        <template v-if="node.data.type === 0 && !node.data.hide">
+          <Submenu :node="node"
+                   :key="key"></Submenu>
+        </template>
+
+        <template v-if="node.data.type === 1 && !node.data.hide">
+          <el-menu-item class="i-el-aside-submenu"
+                        :index="node.data.url"
+                        :key="key">
+            <i :class="node.data.icon"></i>
+            <span slot="title">{{node.data.name}}</span>
+          </el-menu-item>
+        </template>
+      </template>
+
+      <!-- <el-menu-item class="i-el-aside-submenu"
                     index="/home">
         <i class="el-icon-s-home"></i>
         <span slot="title">首页</span>
@@ -35,22 +51,48 @@
           <i class="el-icon-menu"></i>
           <span slot="title">菜单管理</span>
         </el-menu-item>
-      </el-submenu>
+      </el-submenu> -->
+
     </el-menu>
   </el-aside>
 </template>
 
 <script>
+import Submenu from './submenu'
+
 export default {
   data () {
     return {
-      active: '/home'
+      active: '/home',
+      treeData: []
     }
+  },
+  components: {
+    Submenu
   },
   methods: {
     menuSelect (index, indexPath) {
       // console.log('index:' + index + ',indexPath:' + indexPath)
     }
+  },
+  watch: {
+    $route (to, from) {
+      this.active = to.path
+    }
+  },
+  created () {
+    this.active = this.$route.path
+    this.$axiox.get('/sys/menu/tree')
+      .then((response) => {
+        if (response.data.code === 200) {
+          this.treeData = response.data.data
+        } else if (response.data.msg) {
+          this.$message.error(response.data.msg)
+        }
+      })
+      .catch((error) => {
+        console.log('error:' + error)
+      })
   }
 }
 </script>
