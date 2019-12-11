@@ -48,6 +48,9 @@
             <el-button size="mini"
                        type="danger"
                        @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            <el-button size="mini"
+                       type="primary"
+                       @click="handleMenu(scope.$index, scope.row)">菜单权限</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -104,6 +107,26 @@
                    @click="dialogEditRoleConfirm">确 定</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog title="菜单权限"
+               :visible.sync="dialogMenuRole"
+               :width="dialogWidth">
+      <el-tree :props="menu.props"
+               :data="menu.data"
+               empty-text="未找到菜单"
+               node-key="id"
+               show-checkbox
+               :check-strictly="true"
+               ref="tree"
+               @check="dialogMenuRoleTreeCheck">
+      </el-tree>
+      <div slot="footer"
+           class="dialog-footer">
+        <el-button @click="dialogMenuRoleCancel">取 消</el-button>
+        <el-button type="primary"
+                   @click="dialogMenuRoleConfirm">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -134,6 +157,17 @@ export default {
         id: '',
         name: '',
         remark: ''
+      },
+      dialogMenuRole: false,
+      menu: {
+        roleId: '',
+        props: {
+          label: function (data, node) {
+            return data.data.name
+          },
+          children: 'children'
+        },
+        data: []
       }
     }
   },
@@ -311,10 +345,71 @@ export default {
             })
         })
         .catch(_ => { })
+    },
+    handleMenu (index, row) {
+      this.menu.roleId = row.id
+
+      this.dialogMenuRole = true
+      this.$axiox.get('/sys/role/menu/' + row.id)
+        .then((response) => {
+          if (response.data.code === 200) {
+            var menuIds = response.data.data
+            if (menuIds) {
+              this.$refs.tree.setCheckedKeys(menuIds)
+            }
+          } else if (response.data.msg) {
+            this.$message.error(response.data.msg)
+          }
+        })
+        .catch((error) => {
+          console.log('error:' + error)
+        })
+    },
+    initMenuData () {
+      this.$axiox.get('/sys/menu/tree')
+        .then((response) => {
+          if (response.data.code === 200) {
+            this.menu.data = response.data.data
+          } else if (response.data.msg) {
+            this.$message.error(response.data.msg)
+          }
+        })
+        .catch((error) => {
+          console.log('error:' + error)
+        })
+    },
+    dialogMenuRoleCancel () {
+      this.menu.roleId = ''
+
+      this.dialogMenuRole = false
+    },
+    dialogMenuRoleConfirm () {
+      var checkedKeys = this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys())
+      this.$axiox.post('/sys/role/menu/' + this.menu.roleId, checkedKeys)
+        .then((response) => {
+          if (response.data.code === 200) {
+            this.$message({
+              message: '编辑菜单权限成功',
+              type: 'success'
+            })
+          } else if (response.data.msg) {
+            this.$message.error(response.data.msg)
+          }
+        })
+        .catch((error) => {
+          console.log('error:' + error)
+        })
+      this.menu.roleId = ''
+      this.dialogMenuRole = false
+    },
+    dialogMenuRoleTreeCheck (data, node) {
+      console.log(data)
+      console.log(node)
     }
   },
   created () {
     this.getData()
+    this.initMenuData()
   }
 }
 </script>
