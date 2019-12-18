@@ -43,7 +43,8 @@
                          label="更新时间"
                          :formatter="formatDate">
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作"
+                         width="350px">
           <template slot-scope="scope">
             <el-button size="mini"
                        type="primary"
@@ -54,6 +55,9 @@
             <el-button size="mini"
                        :type="enablesBtnType(scope.row.state)"
                        @click="handleToggleState(scope.$index, scope.row)">{{enablesOption(scope.row.state)}}</el-button>
+            <el-button size="mini"
+                       type="primary"
+                       @click="handleRole(scope.$index, scope.row)">角色编辑</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -84,6 +88,32 @@
                    @click="dialogEditUserConfirm">确 定</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog title="角色编辑"
+               :visible.sync="dialogUserRole"
+               :width="dialogWidth"
+               @open="dialogUserRoleOpen">
+      <el-row>
+        <el-col :span="6">
+          <div class="label">选择角色</div>
+        </el-col>
+        <el-select v-model="role.values"
+                   multiple
+                   placeholder="请选择">
+          <el-option v-for="item in role.datas"
+                     :key="item.id"
+                     :label="item.name"
+                     :value="item.id">
+          </el-option>
+        </el-select>
+      </el-row>
+      <div slot="footer"
+           class="dialog-footer">
+        <el-button @click="dialogUserRoleCancel">取 消</el-button>
+        <el-button type="primary"
+                   @click="dialogUserRoleConfirm">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -108,6 +138,12 @@ export default {
       editUserForm: {
         id: '',
         nickname: ''
+      },
+      dialogUserRole: false,
+      role: {
+        userId: '',
+        datas: [],
+        values: []
       }
     }
   },
@@ -131,6 +167,19 @@ export default {
               this.page.total = tablePage.total
               this.tableData = tablePage.data
             }
+          } else if (response.data.msg) {
+            this.$message.error(response.data.msg)
+          }
+        })
+        .catch((error) => {
+          console.log('error:' + error)
+        })
+    },
+    initRoleData () {
+      this.$axiox.get('/sys/role/list')
+        .then((response) => {
+          if (response.data.code === 200) {
+            this.role.datas = response.data.data
           } else if (response.data.msg) {
             this.$message.error(response.data.msg)
           }
@@ -293,12 +342,55 @@ export default {
         nickname: ''
       }
       this.dialogEditUser = false
+    },
+    handleRole (index, row) {
+      this.role.userId = row.id
+
+      this.dialogUserRole = true
+    },
+    dialogUserRoleCancel () {
+      this.role.userId = ''
+
+      this.dialogUserRole = false
+    },
+    dialogUserRoleConfirm () {
+      this.$axiox.post('/sys/user/role/' + this.role.userId, this.role.values)
+        .then((response) => {
+          if (response.data.code === 200) {
+            this.$message({
+              message: '编辑角色权限成功',
+              type: 'success'
+            })
+          } else if (response.data.msg) {
+            this.$message.error(response.data.msg)
+          }
+        })
+        .catch((error) => {
+          console.log('error:' + error)
+        })
+      this.role.userId = ''
+
+      this.dialogUserRole = false
+    },
+    dialogUserRoleOpen () {
+      this.$axiox.get('/sys/user/role/' + this.role.userId)
+        .then((response) => {
+          if (response.data.code === 200) {
+            this.role.values = response.data.data
+          } else if (response.data.msg) {
+            this.$message.error(response.data.msg)
+          }
+        })
+        .catch((error) => {
+          console.log('error:' + error)
+        })
     }
   },
   computed: {
   },
   created () {
     this.getData()
+    this.initRoleData()
   }
 }
 </script>
@@ -316,5 +408,15 @@ export default {
 .table {
   width: 100%;
   margin-top: 10px;
+}
+
+.label {
+  text-align: right;
+  vertical-align: middle;
+  float: right;
+  font-size: 14px;
+  color: #606266;
+  line-height: 40px;
+  padding: 0 12px 0 0;
 }
 </style>

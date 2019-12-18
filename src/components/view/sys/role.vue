@@ -110,15 +110,15 @@
 
     <el-dialog title="菜单权限"
                :visible.sync="dialogMenuRole"
-               :width="dialogWidth">
+               :width="dialogWidth"
+               @open="dialogMenuRoleOpen">
       <el-tree :props="menu.props"
                :data="menu.data"
                empty-text="未找到菜单"
                node-key="id"
                show-checkbox
                :check-strictly="true"
-               ref="tree"
-               @check="dialogMenuRoleTreeCheck">
+               ref="tree">
       </el-tree>
       <div slot="footer"
            class="dialog-footer">
@@ -350,20 +350,6 @@ export default {
       this.menu.roleId = row.id
 
       this.dialogMenuRole = true
-      this.$axiox.get('/sys/role/menu/' + row.id)
-        .then((response) => {
-          if (response.data.code === 200) {
-            var menuIds = response.data.data
-            if (menuIds) {
-              this.$refs.tree.setCheckedKeys(menuIds)
-            }
-          } else if (response.data.msg) {
-            this.$message.error(response.data.msg)
-          }
-        })
-        .catch((error) => {
-          console.log('error:' + error)
-        })
     },
     initMenuData () {
       this.$axiox.get('/sys/menu/tree')
@@ -402,9 +388,21 @@ export default {
       this.menu.roleId = ''
       this.dialogMenuRole = false
     },
-    dialogMenuRoleTreeCheck (data, node) {
-      console.log(data)
-      console.log(node)
+    dialogMenuRoleOpen () {
+      this.$axiox.get('/sys/role/menu/' + this.menu.roleId)
+        .then((response) => {
+          if (response.data.code === 200) {
+            var menuIds = response.data.data
+            if (menuIds) {
+              this.$refs.tree.setCheckedKeys(menuIds)
+            }
+          } else if (response.data.msg) {
+            this.$message.error(response.data.msg)
+          }
+        })
+        .catch((error) => {
+          console.log('error:' + error)
+        })
     }
   },
   created () {
