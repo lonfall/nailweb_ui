@@ -15,9 +15,11 @@
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item command="setting"
-                          icon="fa fa-cog">修改头像</el-dropdown-item>
+                          icon="fa fa-cog">修改头像
+        </el-dropdown-item>
         <el-dropdown-item command="signOut"
-                          icon="fa fa-sign-out">退出</el-dropdown-item>
+                          icon="fa fa-sign-out">退出
+        </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
 
@@ -41,7 +43,8 @@
            class="dialog-footer">
         <el-button @click="dialogEditAvatarCancel">取 消</el-button>
         <el-button type="primary"
-                   @click="dialogEditAvatarConfirm">确 定</el-button>
+                   @click="dialogEditAvatarConfirm">确 定
+        </el-button>
       </div>
     </el-dialog>
   </el-header>

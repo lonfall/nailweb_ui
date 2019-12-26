@@ -14,7 +14,8 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary"
-                     @click="onSubmit">查询</el-button>
+                     @click="onSubmit">查询
+          </el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -48,16 +49,20 @@
           <template slot-scope="scope">
             <el-button size="mini"
                        type="primary"
-                       @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                       @click="handleEdit(scope.$index, scope.row)">编辑
+            </el-button>
             <el-button size="mini"
                        type="danger"
-                       @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                       @click="handleDelete(scope.$index, scope.row)">删除
+            </el-button>
             <el-button size="mini"
                        :type="enablesBtnType(scope.row.state)"
-                       @click="handleToggleState(scope.$index, scope.row)">{{enablesOption(scope.row.state)}}</el-button>
+                       @click="handleToggleState(scope.$index, scope.row)">{{enablesOption(scope.row.state)}}
+            </el-button>
             <el-button size="mini"
                        type="primary"
-                       @click="handleRole(scope.$index, scope.row)">角色编辑</el-button>
+                       @click="handleRole(scope.$index, scope.row)">角色编辑
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -85,7 +90,8 @@
            class="dialog-footer">
         <el-button @click="dialogEditUserCancel">取 消</el-button>
         <el-button type="primary"
-                   @click="dialogEditUserConfirm">确 定</el-button>
+                   @click="dialogEditUserConfirm">确 定
+        </el-button>
       </div>
     </el-dialog>
 
@@ -111,7 +117,8 @@
            class="dialog-footer">
         <el-button @click="dialogUserRoleCancel">取 消</el-button>
         <el-button type="primary"
-                   @click="dialogUserRoleConfirm">确 定</el-button>
+                   @click="dialogUserRoleConfirm">确 定
+        </el-button>
       </div>
     </el-dialog>
   </div>
@@ -386,8 +393,7 @@ export default {
         })
     }
   },
-  computed: {
-  },
+  computed: {},
   created () {
     this.getData()
     this.initRoleData()

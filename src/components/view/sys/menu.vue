@@ -2,7 +2,8 @@
   <div>
     <div class="button-row">
       <el-button type="primary"
-                 @click="dialogCreateMenu=true">新增</el-button>
+                 @click="dialogCreateMenu=true">新增
+      </el-button>
     </div>
     <div class="table">
       <el-table ref="table"
@@ -47,18 +48,22 @@
           <template slot-scope="scope">
             <el-button size="mini"
                        type="primary"
-                       @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                       @click="handleEdit(scope.$index, scope.row)">编辑
+            </el-button>
             <el-button size="mini"
                        type="danger"
-                       @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                       @click="handleDelete(scope.$index, scope.row)">删除
+            </el-button>
             <el-button v-if="scope.row.data.type === 0"
                        size="mini"
                        type="primary"
-                       @click="handleCreateChildren(scope.$index, scope.row)">添加下级菜单</el-button>
+                       @click="handleCreateChildren(scope.$index, scope.row)">添加下级菜单
+            </el-button>
             <el-button v-if="scope.row.data.type === 1"
                        size="mini"
                        type="primary"
-                       @click="handleCreateChildrenAuth(scope.$index, scope.row)">添加权限</el-button>
+                       @click="handleCreateChildrenAuth(scope.$index, scope.row)">添加权限
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -109,7 +114,8 @@
            class="dialog-footer">
         <el-button @click="dialogCreateMenuCancel">取 消</el-button>
         <el-button type="primary"
-                   @click="dialogCreateMenuConfirm">确 定</el-button>
+                   @click="dialogCreateMenuConfirm">确 定
+        </el-button>
       </div>
     </el-dialog>
 
@@ -166,7 +172,8 @@
            class="dialog-footer">
         <el-button @click="dialogEditMenuCancel">取 消</el-button>
         <el-button type="primary"
-                   @click="dialogEditMenuConfirm">确 定</el-button>
+                   @click="dialogEditMenuConfirm">确 定
+        </el-button>
       </div>
     </el-dialog>
 
@@ -215,7 +222,8 @@
            class="dialog-footer">
         <el-button @click="dialogCreateChildrenMenuCancel">取 消</el-button>
         <el-button type="primary"
-                   @click="dialogCreateChildrenMenuConfirm">确 定</el-button>
+                   @click="dialogCreateChildrenMenuConfirm">确 定
+        </el-button>
       </div>
     </el-dialog>
 
@@ -246,7 +254,8 @@
            class="dialog-footer">
         <el-button @click="dialogCreateChildrenAuthMenuCancel">取 消</el-button>
         <el-button type="primary"
-                   @click="dialogCreateChildrenAuthMenuConfirm">确 定</el-button>
+                   @click="dialogCreateChildrenAuthMenuConfirm">确 定
+        </el-button>
       </div>
     </el-dialog>
   </div>

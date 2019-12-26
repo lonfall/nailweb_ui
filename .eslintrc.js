@@ -11,7 +11,7 @@ module.exports = {
   extends: [
     // https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention
     // consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.
-    'plugin:vue/essential', 
+    'plugin:vue/essential',
     // https://github.com/standard/standard/blob/master/docs/RULES-en.md
     'standard'
   ],
@@ -26,6 +26,6 @@ module.exports = {
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     // vue将标签渲染为原生html标签时，由于这些标签是自闭合的，所以有end标签会报错。
-    'vue/no-parsing-error': [2, { "x-invalid-end-tag": false }]
+    'vue/no-parsing-error': [2, { 'x-invalid-end-tag': false }]
   }
 }

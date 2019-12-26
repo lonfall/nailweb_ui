@@ -14,13 +14,15 @@
         </el-form-item>
         <el-form-item>
           <el-button type="primary"
-                     @click="onSubmit">查询</el-button>
+                     @click="onSubmit">查询
+          </el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="button-row">
       <el-button type="primary"
-                 @click="dialogCreateRole=true">新增</el-button>
+                 @click="dialogCreateRole=true">新增
+      </el-button>
     </div>
     <div class="table">
       <el-table :data="tableData"
@@ -44,13 +46,16 @@
           <template slot-scope="scope">
             <el-button size="mini"
                        type="primary"
-                       @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                       @click="handleEdit(scope.$index, scope.row)">编辑
+            </el-button>
             <el-button size="mini"
                        type="danger"
-                       @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                       @click="handleDelete(scope.$index, scope.row)">删除
+            </el-button>
             <el-button size="mini"
                        type="primary"
-                       @click="handleMenu(scope.$index, scope.row)">菜单权限</el-button>
+                       @click="handleMenu(scope.$index, scope.row)">菜单权限
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -82,7 +87,8 @@
            class="dialog-footer">
         <el-button @click="dialogCreateRoleCancel">取 消</el-button>
         <el-button type="primary"
-                   @click="dialogCreateRoleConfirm">确 定</el-button>
+                   @click="dialogCreateRoleConfirm">确 定
+        </el-button>
       </div>
     </el-dialog>
 
@@ -104,7 +110,8 @@
            class="dialog-footer">
         <el-button @click="dialogEditRoleCancel">取 消</el-button>
         <el-button type="primary"
-                   @click="dialogEditRoleConfirm">确 定</el-button>
+                   @click="dialogEditRoleConfirm">确 定
+        </el-button>
       </div>
     </el-dialog>
 
@@ -124,7 +131,8 @@
            class="dialog-footer">
         <el-button @click="dialogMenuRoleCancel">取 消</el-button>
         <el-button type="primary"
-                   @click="dialogMenuRoleConfirm">确 定</el-button>
+                   @click="dialogMenuRoleConfirm">确 定
+        </el-button>
       </div>
     </el-dialog>
   </div>

@@ -18,7 +18,7 @@ const router = new Router({
   routes: []
 })
 
-var noFind = {
+let noFind = {
   path: '/404',
   name: '404',
   component: _import('common/404'),
@@ -28,7 +28,7 @@ var noFind = {
   }
 }
 
-var login = {
+let login = {
   path: '/login',
   name: 'login',
   component: _import('common/login'),
@@ -38,7 +38,7 @@ var login = {
   }
 }
 
-var main = {
+let main = {
   path: '/',
   name: 'main',
   redirect: '/home',
@@ -51,7 +51,7 @@ var main = {
 
 router.addRoutes([login, noFind])
 
-var isUserMenuTouterLoad = false // 是否加载用户菜单路由
+let isUserMenuTouterLoad = false // 是否加载用户菜单路由
 
 router.beforeEach((to, from, next) => {
   // 判断当前路由是否不需要授权
@@ -65,8 +65,7 @@ router.beforeEach((to, from, next) => {
         // 如果路由加载完毕则执行下一个钩子
         next()
       } else {
-        axiox
-          .get('/sys/menu/tree')
+        axiox.get('/sys/menu/tree')
           .then(response => {
             if (response.data.code === 200) {
               var treeData = response.data.data
@@ -106,8 +105,8 @@ router.beforeEach((to, from, next) => {
  */
 function initUserMenuTouter (treeData) {
   if (treeData) {
-    for (var i = 0; i < treeData.length; i++) {
-      var node = treeData[i]
+    for (let i = 0; i < treeData.length; i++) {
+      let node = treeData[i]
       if (node.data.type === 1) {
         // 是菜单则添加路由
         main.children.push({

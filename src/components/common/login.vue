@@ -25,7 +25,8 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary"
-                       @click="submitForm('loginForm')">提交</el-button>
+                       @click="submitForm('loginForm')">提交
+            </el-button>
             <el-button @click="resetForm('loginForm')">重置</el-button>
           </el-form-item>
         </el-form>
