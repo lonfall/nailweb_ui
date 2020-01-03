@@ -25,34 +25,6 @@
           </el-menu-item>
         </template>
       </template>
-
-      <!-- <el-menu-item class="i-el-aside-submenu"
-                    index="/home">
-        <i class="el-icon-s-home"></i>
-        <span slot="title">首页</span>
-      </el-menu-item>
-      <el-submenu index="/">
-        <template slot="title">
-          <i class="el-icon-s-tools"></i>
-          <span>系统设置</span>
-        </template>
-        <el-menu-item class="i-el-aside-submenu"
-                      index="/user">
-          <i class="el-icon-user-solid"></i>
-          <span slot="title">用户管理</span>
-        </el-menu-item>
-        <el-menu-item class="i-el-aside-submenu"
-                      index="/role">
-          <i class="el-icon-user-solid"></i>
-          <span slot="title">角色管理</span>
-        </el-menu-item>
-        <el-menu-item class="i-el-aside-submenu"
-                      index="/menu">
-          <i class="el-icon-menu"></i>
-          <span slot="title">菜单管理</span>
-        </el-menu-item>
-      </el-submenu> -->
-
     </el-menu>
   </el-aside>
 </template>
@@ -82,7 +54,7 @@ export default {
   },
   created () {
     this.active = this.$route.path
-    this.$axiox.get('/sys/menu/tree')
+    this.$axiox.get('/sys/menu/tree/current')
       .then((response) => {
         if (response.data.code === 200) {
           this.treeData = response.data.data

@@ -65,7 +65,7 @@ router.beforeEach((to, from, next) => {
         // 如果路由加载完毕则执行下一个钩子
         next()
       } else {
-        axiox.get('/sys/menu/tree')
+        axiox.get('/sys/menu/tree/current')
           .then(response => {
             if (response.data.code === 200) {
               var treeData = response.data.data
