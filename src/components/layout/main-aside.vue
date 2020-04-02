@@ -10,16 +10,16 @@
              active-text-color="#40b4ff"
              class="i-el-aside-menu-vertical"
              @select="menuSelect">
-      <template v-for="(node,key) in treeData">
+      <template v-for="node in treeData">
         <template v-if="node.data.type === 0 && !node.data.hide">
           <Submenu :node="node"
-                   :key="key"></Submenu>
+                   :key="node.id"></Submenu>
         </template>
 
         <template v-if="node.data.type === 1 && !node.data.hide">
           <el-menu-item class="i-el-aside-submenu"
                         :index="node.data.url"
-                        :key="key">
+                        :key="node.id">
             <i :class="node.data.icon"></i>
             <span slot="title">{{node.data.name}}</span>
           </el-menu-item>
@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     menuSelect (index, indexPath) {
-      // console.log('index:' + index + ',indexPath:' + indexPath)
+      console.log('index:' + index + ',indexPath:' + indexPath + ',active:' + this.active)
     }
   },
   watch: {

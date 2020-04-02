@@ -8,16 +8,16 @@
     </template>
 
     <template v-if="node.children && node.children.length">
-      <template v-for="(child_node,key) in node.children">
+      <template v-for="child_node in node.children">
         <template v-if="child_node.data.type === 0 && !child_node.data.hide">
           <Submenu :node="child_node"
-                   :key="key"></Submenu>
+                   :key="child_node.id"></Submenu>
         </template>
 
         <template v-if="child_node.data.type === 1 && !child_node.data.hide">
           <el-menu-item class="i-el-aside-submenu"
                         :index="child_node.data.url"
-                        :key="key">
+                        :key="child_node.id">
             <i :class="child_node.data.icon"></i>
             <span slot="title">{{child_node.data.name}}</span>
           </el-menu-item>
