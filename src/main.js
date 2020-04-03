@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import VueCookies from 'vue-cookies'
 import App from './App'
+import store from './store'
 import router from './router'
 import axiox from './axios/http'
 // import iview from 'iview'
@@ -23,6 +24,7 @@ Vue.use(VueCookies)
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

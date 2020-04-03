@@ -2,10 +2,14 @@
   <el-main class="i-el-main">
     <el-breadcrumb class="i-el-main-breadcrumb"
                    separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>活动管理</el-breadcrumb-item>
-      <el-breadcrumb-item>活动列表</el-breadcrumb-item>
-      <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+      <template v-for="path in pathList">
+        <template v-if="path.type == 1">
+          <el-breadcrumb-item :key="'breadcrumb'+path.id" :to="{ path: path.url }">{{path.name}}</el-breadcrumb-item>
+        </template>
+        <template v-if="path.type == 0">
+          <el-breadcrumb-item :key="'breadcrumb'+path.id">{{path.name}}</el-breadcrumb-item>
+        </template>
+      </template>
     </el-breadcrumb>
     <el-card class="i-el-main-content"
              :body-style="{ 'min-height': contentHeight + 'px' }"
@@ -21,6 +25,14 @@ export default {
     documentClientHeight: Number
   },
   computed: {
+    pathList: {
+      get: function () {
+        return this.$store.getters.getPathList
+      },
+      set: function (newValue) {
+        this.$store.commit('setPathList', newValue)
+      }
+    },
     contentHeight: function () {
       return this.documentClientHeight - 60 - 35 - 40 - 2
     }

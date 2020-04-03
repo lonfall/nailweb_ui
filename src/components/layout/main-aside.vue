@@ -1,25 +1,14 @@
 <template>
-  <el-aside class="i-el-aside"
-            width="230px">
-    <el-menu mode="vertical"
-             unique-opened
-             router
-             :default-active="active"
-             background-color="#fff0"
-             text-color="#ffffff"
-             active-text-color="#40b4ff"
-             class="i-el-aside-menu-vertical"
-             @select="menuSelect">
+  <el-aside class="i-el-aside" width="230px">
+    <el-menu mode="vertical" unique-opened router :default-active="active" background-color="#fff0" text-color="#ffffff"
+             active-text-color="#40b4ff" class="i-el-aside-menu-vertical" @select="menuSelect">
       <template v-for="node in treeData">
         <template v-if="node.data.type === 0 && !node.data.hide">
-          <Submenu :node="node"
-                   :key="node.id"></Submenu>
+          <Submenu :node="node" :key="node.id"></Submenu>
         </template>
 
         <template v-if="node.data.type === 1 && !node.data.hide">
-          <el-menu-item class="i-el-aside-submenu"
-                        :index="node.data.url"
-                        :key="node.id">
+          <el-menu-item class="i-el-aside-submenu" :index="node.data.url" :key="node.id">
             <i :class="node.data.icon"></i>
             <span slot="title">{{node.data.name}}</span>
           </el-menu-item>
@@ -39,12 +28,49 @@ export default {
       treeData: []
     }
   },
+  computed: {
+    pathList: {
+      get: function () {
+        return this.$store.getters.getPathList
+      },
+      set: function (newValue) {
+        this.$store.commit('setPathList', newValue)
+      }
+    }
+  },
   components: {
     Submenu
   },
   methods: {
+    menuIndexPathListFind (index, pathList, treeData) {
+      let list = []
+      for (let i = 0; i < treeData.length; i++) {
+        let td = treeData[i]
+        if (td.data.type === 1) {
+          if (td.data.url === index) {
+            list.push.apply(list, pathList)
+            list.push({
+              id: td.data.id,
+              type: 1,
+              name: td.data.name,
+              url: td.data.url
+            })
+            return list
+          }
+        } else if (td.data.type === 0 && td.hasChildren === true) {
+          list.push({
+            id: td.data.id,
+            type: 0,
+            name: td.data.name,
+            url: td.data.url
+          })
+          return this.menuIndexPathListFind(index, list, td.children)
+        }
+      }
+      return []
+    },
     menuSelect (index, indexPath) {
-      console.log('index:' + index + ',indexPath:' + indexPath + ',active:' + this.active)
+      this.pathList = this.menuIndexPathListFind(index, [], this.treeData)
     }
   },
   watch: {
@@ -79,12 +105,15 @@ export default {
   overflow: hidden;
   background-color: #515a6e;
 }
+
 .i-el-aside-menu-vertical {
   border-right: 0;
 }
+
 .i-el-aside-menu-item > [class^="el-icon"] {
   color: #ffffff;
 }
+
 .i-el-aside-submenu [class^="el-icon"] {
   color: #ffffff;
 }
