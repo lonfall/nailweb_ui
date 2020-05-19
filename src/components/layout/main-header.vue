@@ -1,5 +1,9 @@
 <template>
   <el-header class="i-el-header">
+    <el-image
+      style="width: 200px; height: 60px"
+      :src="titleLogoUrl"
+      fit="scale-down"></el-image>
     <el-dropdown trigger="click"
                  class="i-el-header-dropdown"
                  @command="handleCommand">
@@ -52,6 +56,7 @@
 
 <script>
 import avatarError from '@/assets/img/avatar_error.png'
+import bg1 from '@/assets/img/dstj.png'
 
 export default {
   data () {
@@ -61,7 +66,8 @@ export default {
       dialogLabelWidth: '100px',
       dialogEditAvatar: false,
       avatarUrl: '',
-      uploadUrl: process.env.API_HOST + 'file/upload'
+      uploadUrl: process.env.API_HOST + 'file/upload',
+      titleLogoUrl: bg1
     }
   },
   methods: {
