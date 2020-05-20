@@ -1,40 +1,40 @@
 <template>
-  <div class="i-login">
-    <el-card class="i-login-el-card"
-             :body-style="{ padding: '0px' }">
-      <el-image class="i-login-el-image"
-                :src="bg1"
-                fit="cover"></el-image>
-      <div class="i-login-el-form">
-        <el-form label-position="right"
-                 label-width="auto"
-                 ref="loginForm"
-                 :model="loginForm"
-                 :rules="loginRules">
-          <h1 style="margin: 25px 0px;">登录</h1>
-          <el-form-item label="用户名"
-                        prop="username">
-            <el-input v-model="loginForm.username"
-                      @keyup.enter.native="submitForm('loginForm')"
-                      autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="密码"
-                        prop="password">
-            <el-input type="password"
-                      v-model="loginForm.password"
-                      @keyup.enter.native="submitForm('loginForm')"
-                      autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary"
-                       @click="submitForm('loginForm')">提交
-            </el-button>
-            <el-button @click="resetForm('loginForm')">重置</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-    </el-card>
-  </div>
+    <div class="i-login">
+        <el-card class="i-login-el-card"
+                 :body-style="{ padding: '0px' }">
+            <el-image class="i-login-el-image"
+                      :src="bg1"
+                      fit="cover"></el-image>
+            <div class="i-login-el-form">
+                <el-form label-position="right"
+                         label-width="auto"
+                         ref="loginForm"
+                         :model="loginForm"
+                         :rules="loginRules">
+                    <h1 style="margin: 25px 0px;">登录</h1>
+                    <el-form-item label="用户名"
+                                  prop="username">
+                        <el-input v-model="loginForm.username"
+                                  @keyup.enter.native="submitForm('loginForm')"
+                                  autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="密码"
+                                  prop="password">
+                        <el-input type="password"
+                                  v-model="loginForm.password"
+                                  @keyup.enter.native="submitForm('loginForm')"
+                                  autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary"
+                                   @click="submitForm('loginForm')">提交
+                        </el-button>
+                        <el-button @click="resetForm('loginForm')">重置</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+        </el-card>
+    </div>
 </template>
 
 <script>
@@ -69,9 +69,9 @@ export default {
             '&password=' + this.loginForm.password, {})
             .then(function (response) {
               if (response.data.code === 200) {
-                // 获取token，这里后端已经把token写入cookie中，不需要操作
-                // var token = response.data.data
-                // console.log('token = ' + token)
+                // 获取token，并把token写入cookies中
+                var token = response.data.data
+                _this.$cookies.set('token', token)
                 // 登录成功，跳转到主页
                 _this.$router.push('/home')
               } else if (response.data.msg) {
@@ -95,38 +95,38 @@ export default {
 
 <style>
 .i-login-el-form {
-  width: 340px;
-  height: 340px;
-  position: relative;
-  float: right;
-  z-index: 110;
-  padding: 30px 40px;
+    width: 340px;
+    height: 340px;
+    position: relative;
+    float: right;
+    z-index: 110;
+    padding: 30px 40px;
 }
 .i-login-el-image {
-  width: 260px;
-  height: 340px;
-  float: left;
-  z-index: 100;
+    width: 260px;
+    height: 340px;
+    float: left;
+    z-index: 100;
 }
 .i-login-el-card {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 600px;
-  height: 340px;
-  margin-left: -350px;
-  margin-top: -170px;
-  border: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 600px;
+    height: 340px;
+    margin-left: -350px;
+    margin-top: -170px;
+    border: none;
 }
 .i-login {
-  background-color: #f5f7f9;
-  height: 100%;
-  width: 100%;
-  position: fixed;
+    background-color: #f5f7f9;
+    height: 100%;
+    width: 100%;
+    position: fixed;
 }
 *,
 *:before,
 *:after {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 </style>
