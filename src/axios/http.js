@@ -61,7 +61,12 @@ axios.interceptors.request.use(
 // http response 拦截器
 axios.interceptors.response.use(
   response => {
-    if (response.data.resultCode === '404') {
+    if (response.data.code === 401) {
+      console.log('响应拦截', response.data.msg)
+      // 清空登录信息
+      cookie.remove('token')
+      return response
+    } else if (response.data.resultCode === '404') {
       console.log('response.data.resultCode是404')
       // 跳转到登录页面
       // window.location.href = 'http://127.0.0.1:8080/#/login'
