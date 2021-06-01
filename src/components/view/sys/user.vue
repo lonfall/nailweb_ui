@@ -1,127 +1,128 @@
 <template>
-  <div>
-    <div class="form-filter">
-      <el-form :inline="true"
-               :model="userForm"
-               class="demo-form-inline">
-        <el-form-item label="用户名">
-          <el-input v-model="userForm.username"
-                    placeholder="用户名"></el-input>
-        </el-form-item>
-        <el-form-item label="昵称">
-          <el-input v-model="userForm.nickname"
-                    placeholder="昵称"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary"
-                     @click="onSubmit">查询
-          </el-button>
-        </el-form-item>
-      </el-form>
-    </div>
-    <div class="table">
-      <el-table :data="tableData"
-                border
-                style="width: 100%">
-        <el-table-column prop="username"
-                         label="用户名">
-        </el-table-column>
-        <el-table-column prop="nickname"
-                         label="昵称">
-        </el-table-column>
-        <el-table-column prop="state"
-                         label="状态">
-          <template slot-scope="scope">
-            <el-tag :type="enablesType(scope.row.state)"
-                    v-html="isEnables(scope.row.state)"></el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="createTime"
-                         label="创建时间"
-                         :formatter="formatDate">
-        </el-table-column>
-        <el-table-column prop="updateTime"
-                         label="更新时间"
-                         :formatter="formatDate">
-        </el-table-column>
-        <el-table-column label="操作"
-                         width="350px">
-          <template slot-scope="scope">
-            <el-button size="mini"
-                       type="primary"
-                       @click="handleEdit(scope.$index, scope.row)">编辑
-            </el-button>
-            <el-button size="mini"
-                       type="danger"
-                       @click="handleDelete(scope.$index, scope.row)">删除
-            </el-button>
-            <el-button size="mini"
-                       :type="enablesBtnType(scope.row.state)"
-                       @click="handleToggleState(scope.$index, scope.row)">{{enablesOption(scope.row.state)}}
-            </el-button>
-            <el-button size="mini"
-                       type="primary"
-                       @click="handleRole(scope.$index, scope.row)">角色编辑
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-pagination @size-change="handleSizeChange"
-                     @current-change="handleCurrentChange"
-                     :current-page="page.current"
-                     :page-sizes="page.sizes"
-                     :page-size="page.size"
-                     layout="total, sizes, prev, pager, next, jumper"
-                     :total="page.total">
-      </el-pagination>
-    </div>
+    <div>
+        <div class="form-filter">
+            <el-form :inline="true"
+                     :model="userForm"
+                     class="demo-form-inline">
+                <el-form-item label="用户名">
+                    <el-input v-model="userForm.username"
+                              placeholder="用户名"></el-input>
+                </el-form-item>
+                <el-form-item label="昵称">
+                    <el-input v-model="userForm.nickname"
+                              placeholder="昵称"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary"
+                               @click="onSubmit">查询
+                    </el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+        <div class="table">
+            <el-table :data="tableData"
+                      border
+                      style="width: 100%">
+                <el-table-column prop="username"
+                                 label="用户名">
+                </el-table-column>
+                <el-table-column prop="nickname"
+                                 label="昵称">
+                </el-table-column>
+                <el-table-column prop="state"
+                                 label="状态">
+                    <template slot-scope="scope">
+                        <el-tag :type="enablesType(scope.row.state)"
+                                v-html="isEnables(scope.row.state)"></el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="createTime"
+                                 label="创建时间"
+                                 :formatter="formatDate">
+                </el-table-column>
+                <el-table-column prop="updateTime"
+                                 label="更新时间"
+                                 :formatter="formatDate">
+                </el-table-column>
+                <el-table-column label="操作"
+                                 width="350px">
+                    <template slot-scope="scope">
+                        <el-button size="mini"
+                                   type="primary"
+                                   @click="handleEdit(scope.$index, scope.row)">编辑
+                        </el-button>
+                        <el-button size="mini"
+                                   type="danger"
+                                   @click="handleDelete(scope.$index, scope.row)">删除
+                        </el-button>
+                        <el-button size="mini"
+                                   :type="enablesBtnType(scope.row.state)"
+                                   @click="handleToggleState(scope.$index, scope.row)">
+                            {{enablesOption(scope.row.state)}}
+                        </el-button>
+                        <el-button size="mini"
+                                   type="primary"
+                                   @click="handleRole(scope.$index, scope.row)">角色编辑
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <el-pagination @size-change="handleSizeChange"
+                           @current-change="handleCurrentChange"
+                           :current-page="page.current"
+                           :page-sizes="page.sizes"
+                           :page-size="page.size"
+                           layout="total, sizes, prev, pager, next, jumper"
+                           :total="page.total">
+            </el-pagination>
+        </div>
 
-    <el-dialog title="编辑用户"
-               :visible.sync="dialogEditUser"
-               :width="dialogWidth">
-      <el-form :model="editUserForm"
-               :label-width="dialogLabelWidth">
-        <el-form-item label="昵称">
-          <el-input v-model="editUserForm.nickname"
-                    autocomplete="off"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer"
-           class="dialog-footer">
-        <el-button @click="dialogEditUserCancel">取 消</el-button>
-        <el-button type="primary"
-                   @click="dialogEditUserConfirm">确 定
-        </el-button>
-      </div>
-    </el-dialog>
+        <el-dialog title="编辑用户"
+                   :visible.sync="dialogEditUser"
+                   :width="dialogWidth">
+            <el-form :model="editUserForm"
+                     :label-width="dialogLabelWidth">
+                <el-form-item label="昵称">
+                    <el-input v-model="editUserForm.nickname"
+                              autocomplete="off"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer"
+                 class="dialog-footer">
+                <el-button @click="dialogEditUserCancel">取 消</el-button>
+                <el-button type="primary"
+                           @click="dialogEditUserConfirm">确 定
+                </el-button>
+            </div>
+        </el-dialog>
 
-    <el-dialog title="角色编辑"
-               :visible.sync="dialogUserRole"
-               :width="dialogWidth"
-               @open="dialogUserRoleOpen">
-      <el-row>
-        <el-col :span="6">
-          <div class="label">选择角色</div>
-        </el-col>
-        <el-select v-model="role.values"
-                   multiple
-                   placeholder="请选择">
-          <el-option v-for="item in role.datas"
-                     :key="item.id"
-                     :label="item.name"
-                     :value="item.id">
-          </el-option>
-        </el-select>
-      </el-row>
-      <div slot="footer"
-           class="dialog-footer">
-        <el-button @click="dialogUserRoleCancel">取 消</el-button>
-        <el-button type="primary"
-                   @click="dialogUserRoleConfirm">确 定
-        </el-button>
-      </div>
-    </el-dialog>
-  </div>
+        <el-dialog title="角色编辑"
+                   :visible.sync="dialogUserRole"
+                   :width="dialogWidth"
+                   @open="dialogUserRoleOpen">
+            <el-row>
+                <el-col :span="6">
+                    <div class="label">选择角色</div>
+                </el-col>
+                <el-select v-model="role.values"
+                           multiple
+                           placeholder="请选择">
+                    <el-option v-for="item in role.datas"
+                               :key="item.id"
+                               :label="item.name"
+                               :value="item.id">
+                    </el-option>
+                </el-select>
+            </el-row>
+            <div slot="footer"
+                 class="dialog-footer">
+                <el-button @click="dialogUserRoleCancel">取 消</el-button>
+                <el-button type="primary"
+                           @click="dialogUserRoleConfirm">确 定
+                </el-button>
+            </div>
+        </el-dialog>
+    </div>
 </template>
 
 <script>
@@ -403,26 +404,26 @@ export default {
 
 <style>
 .form-filter {
-  height: auto;
-  width: 100%;
-  border: 1px solid #d7dae2;
-  border-radius: 4px;
-  padding: 20px;
-  padding-bottom: 0px;
+    height: auto;
+    width: 100%;
+    border: 1px solid #d7dae2;
+    border-radius: 4px;
+    padding: 20px;
+    padding-bottom: 0px;
 }
 
 .table {
-  width: 100%;
-  margin-top: 10px;
+    width: 100%;
+    margin-top: 10px;
 }
 
 .label {
-  text-align: right;
-  vertical-align: middle;
-  float: right;
-  font-size: 14px;
-  color: #606266;
-  line-height: 40px;
-  padding: 0 12px 0 0;
+    text-align: right;
+    vertical-align: middle;
+    float: right;
+    font-size: 14px;
+    color: #606266;
+    line-height: 40px;
+    padding: 0 12px 0 0;
 }
 </style>
